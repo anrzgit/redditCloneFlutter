@@ -4,10 +4,18 @@ import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
+import 'package:routemaster/routemaster.dart';
 
 class CommunityScreen extends ConsumerWidget {
   final String communityName;
   const CommunityScreen({super.key, required this.communityName});
+
+  ///
+  void navigateToModTools(BuildContext context) {
+    Routemaster.of(context).push('/mod/tools/$communityName');
+  }
+
+  ///
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +62,8 @@ class CommunityScreen extends ConsumerWidget {
                                 Text('${community.members.length} members'),
                                 community.moderators.contains(user!.uid)
                                     ? OutlinedButton(
-                                        onPressed: () {},
+                                        onPressed: () =>
+                                            navigateToModTools(context),
                                         style: ButtonStyle(
                                           shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(

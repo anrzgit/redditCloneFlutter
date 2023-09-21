@@ -36,7 +36,7 @@ class HomeScreen extends ConsumerWidget {
             )
           ]),
       body: Center(
-        child: Text(user.email!),
+        child: Text(user.name!),
       ),
       drawer: const CommunityListDrawer(),
     );

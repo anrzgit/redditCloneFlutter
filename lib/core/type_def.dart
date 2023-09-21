@@ -9,4 +9,4 @@ typedef FutureEither<T> = Future<Either<Failure, T>>;
 
 ///FutureVoid is a type that returns a Future<void>
 ///this is a generic type
-typedef FutureVoid = Future<void>;
+typedef FutureVoid = FutureEither<void>;

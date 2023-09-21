@@ -36,7 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         .watch(authContollerProvider.notifier)
         .getUserData(data.uid)
         .first;
-    ref.read(userProvider.notifier).update((state) => userModel);
+    ref.watch(userProvider.notifier).update((state) => userModel);
   }
 
   @override
@@ -48,19 +48,20 @@ class _MyAppState extends ConsumerState<MyApp> {
             theme: Pallete.darkModeAppTheme,
             routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
               if (data != null) {
+                print(data.displayName);
                 getData(ref, data);
-                if (userModel != null) {
-                  return loggedInRoutes;
-                }
+                return loggedInRoutes;
               }
               return loggedOutRoutes;
             }),
             routeInformationParser: const RoutemasterParser(),
           ),
-          error: (error, StackTrace) => ErrorText(
+          error: (error, stackTrace) => ErrorText(
             error: error.toString(),
           ),
           loading: () => const Loader(),
         );
   }
 }
+
+//

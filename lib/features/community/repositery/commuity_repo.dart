@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/failure.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
+import 'package:reddit_clone/core/type_def.dart';
 import 'package:reddit_clone/models/community_model.dart';
 
 final CommunityRepoProvider =
@@ -54,6 +55,20 @@ class CommunityRepo {
     return _communityCollection.doc(name).snapshots().map((event) =>
         CommunityModel.fromMap(event.data() as Map<String, dynamic>));
   }
+
+  ///
+  FutureVoid editCommunity(CommunityModel community) async {
+    try {
+      return right(
+          _communityCollection.doc(community.name).update(community.toMap()));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  ///
 
   CollectionReference get _communityCollection =>
       _firestore.collection(FirebaseConstants.communitiesCollection);

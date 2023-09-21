@@ -103,4 +103,11 @@ class AuthRepo {
       return left(Failure(message: e.toString()));
     }
   }
+
+  void logout() async {
+    await _googleSignIn.signOut();
+    await _firebaseAuth.signOut();
+  }
+
+  ///
 }

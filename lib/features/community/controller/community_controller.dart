@@ -18,7 +18,7 @@ final userCommunitiesProvider = StreamProvider((ref) {
 ///
 final communityContollerProvider =
     StateNotifierProvider<CommunityContoller, bool>((ref) {
-  final communityRepo = ref.watch(CommunityRepoProvider);
+  final communityRepo = ref.watch(communityRepoProvider);
   final storageRepo = ref.watch(storageRepoProvider);
   return CommunityContoller(
       communityRepo: communityRepo, ref: ref, storageRepo: storageRepo);
@@ -28,6 +28,10 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
   return ref
       .watch(communityContollerProvider.notifier)
       .getCommunityByName(name);
+});
+
+final searchCommunityProvider = StreamProvider.family((ref, String query) {
+  return ref.watch(communityContollerProvider.notifier).searchCommunity(query);
 });
 
 class CommunityContoller extends StateNotifier<bool> {
@@ -115,5 +119,9 @@ class CommunityContoller extends StateNotifier<bool> {
       showSnackBar(context, 'Community updated successfully');
       Navigator.of(context).pop();
     });
+  }
+
+  Stream<List<CommunityModel>> searchCommunity(String query) {
+    return _communityRepo.searchCommunity(query);
   }
 }

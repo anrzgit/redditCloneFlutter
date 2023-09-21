@@ -7,7 +7,8 @@ import 'package:reddit_clone/core/providers/firebase_provider.dart';
 import 'package:reddit_clone/core/type_def.dart';
 import 'package:reddit_clone/models/community_model.dart';
 
-final CommunityRepoProvider =
+///
+final communityRepoProvider =
     Provider((ref) => CommunityRepo(firestore: ref.watch(fireStoreProvider)));
 
 class CommunityRepo {
@@ -66,6 +67,29 @@ class CommunityRepo {
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  Stream<List<CommunityModel>> searchCommunity(String query) {
+    return _communityCollection
+        .where(
+          'name',
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
+          isLessThan: query.isEmpty
+              ? null
+              : query.substring(0, query.length - 1) +
+                  String.fromCharCode(
+                    query.codeUnitAt(query.length - 1) + 1,
+                  ),
+        )
+        .snapshots()
+        .map((event) {
+      List<CommunityModel> communities = [];
+      for (var community in event.docs) {
+        communities.add(
+            CommunityModel.fromMap(community.data() as Map<String, dynamic>));
+      }
+      return communities;
+    });
   }
 
   ///

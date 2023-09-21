@@ -41,7 +41,7 @@ class CommunityScreen extends ConsumerWidget {
                       ),
                     ),
                     SliverPadding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 14, right: 14),
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
                           [

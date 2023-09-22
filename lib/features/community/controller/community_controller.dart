@@ -76,6 +76,17 @@ class CommunityContoller extends StateNotifier<bool> {
     );
   }
 
+  void joinCommunity(CommunityModel community, BuildContext context) async {
+    final user = _ref.read(userProvider)!.uid;
+    if (community.members.contains(user)) {
+      _communityRepo.leaveCommunity(community.name, user!);
+      showSnackBar(context, 'You Left ${community.name}');
+    } else {
+      _communityRepo.joinCommunity(community.name, user!);
+      showSnackBar(context, 'You Joined ${community.name}');
+    }
+  }
+
   Stream<List<CommunityModel>> getUserCommunities() {
     final uid = _ref.read(userProvider)!.uid;
     return _communityRepo.getUserCommunities(uid!);
@@ -124,4 +135,13 @@ class CommunityContoller extends StateNotifier<bool> {
   Stream<List<CommunityModel>> searchCommunity(String query) {
     return _communityRepo.searchCommunity(query);
   }
+
+  void addMods(
+      String communityName, List<String> uids, BuildContext context) async {
+    final res = await _communityRepo.addMods(communityName, uids);
+    res.fold((l) => showSnackBar(context, l.toString()),
+        (r) => Navigator.of(context).pop());
+  }
+
+  ///
 }

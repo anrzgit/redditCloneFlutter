@@ -31,12 +31,16 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   ///
   UserModel? userModel;
-  void getData(WidgetRef ref, User data) async {
+  bool _isLoading = false;
+
+  //
+  Future<UserModel?> getData(WidgetRef ref, User data) async {
     userModel = await ref
         .watch(authContollerProvider.notifier)
         .getUserData(data.uid)
         .first;
     ref.watch(userProvider.notifier).update((state) => userModel);
+    return userModel;
   }
 
   @override
@@ -45,12 +49,11 @@ class _MyAppState extends ConsumerState<MyApp> {
           data: (data) => MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
-            theme: Pallete.darkModeAppTheme,
+            theme: ref.watch(themeNotifierProvider),
             routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
               if (data != null) {
-                print(data.displayName);
                 getData(ref, data);
-                return loggedInRoutes;
+                if (userModel != null) return loggedInRoutes;
               }
               return loggedOutRoutes;
             }),

@@ -1,13 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/home/delegates/search_community_delegate.dart';
 import 'package:reddit_clone/features/home/drawers/community_list_drawer.dart';
 import 'package:reddit_clone/features/home/drawers/profile_drawer.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  ///
+  int _pageIndex = 0;
+  bool _isLoading = false;
+
+  ///
   void displayDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -16,9 +28,15 @@ class HomeScreen extends ConsumerWidget {
     Scaffold.of(context).openEndDrawer();
   }
 
+  void onPageChanged(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
+  Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
     // print('user in home screen: $user');
     return Scaffold(
       appBar: AppBar(
@@ -42,17 +60,30 @@ class HomeScreen extends ConsumerWidget {
               builder: (context) => IconButton(
                 onPressed: () => displayEndDrawer(context),
                 icon: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      user.profilePic ?? 'https://i.imgur.com/BoN9kdC.png'),
+                  backgroundImage:
+                      NetworkImage(user!.profilePic ?? Constants.avatarDefault),
                 ),
               ),
             )
           ]),
-      body: Center(
-        child: Text(user.email ?? 'no email'),
-      ),
+      body: Constants.tabWidgets[_pageIndex],
       drawer: const CommunityListDrawer(),
       endDrawer: const ProfileDrawer(),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: _pageIndex,
+        onTap: onPageChanged,
+        activeColor: Theme.of(context).colorScheme.primary,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_box_outlined),
+            label: 'Add Post',
+          ),
+        ],
+      ),
     );
   }
 }

@@ -62,7 +62,7 @@ class UserModel {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       profilePic: map['profilePic'] ?? '',
-      bannerImage: map['banner'] ?? '',
+      bannerImage: map['bannerImage'] ?? '',
       uid: map['uid'] ?? '',
       isAuthenticated: map['isAuthenticated'] == 'true',
       karma: map['karma']?.toInt() ?? 0,

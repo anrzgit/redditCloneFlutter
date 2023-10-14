@@ -7,6 +7,7 @@ import 'package:reddit_clone/core/providers/storage_repo_provider.dart';
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/user_profile/repositery/user_profile_repo.dart';
+import 'package:reddit_clone/models/post_model.dart';
 import 'package:reddit_clone/models/user_model.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -21,9 +22,9 @@ final userProfileControllerProvider =
   );
 });
 
-// final getUserPostsProvider = StreamProvider.family((ref, String uid) {
-//   return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
-// });
+final getUserPostsProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
+});
 
 class UserProfileController extends StateNotifier<bool> {
   final UserProfileRepo _userProfileRepository;
@@ -85,9 +86,11 @@ class UserProfileController extends StateNotifier<bool> {
     );
   }
 
-  // Stream<List<Post>> getUserPosts(String uid) {
-  //   return _userProfileRepository.getUserPosts(uid);
-  // }
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _userProfileRepository.getUserPosts(uid);
+  }
+
+  ///
 
   // void updateUserKarma(UserKarma karma) async {
   //   UserModel user = _ref.read(userProvider)!;

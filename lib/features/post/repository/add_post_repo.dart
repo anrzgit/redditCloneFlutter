@@ -5,6 +5,7 @@ import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/failure.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
 import 'package:reddit_clone/core/type_def.dart';
+import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
 
 final postRepoProvider = Provider((ref) {
@@ -25,6 +26,88 @@ class PostRepo {
       throw e.message!;
     } catch (e) {
       return left(Failure(message: e.toString()));
+    }
+  }
+
+  Stream<List<Post>> fetchUserPosts(List<CommunityModel> community) {
+    try {
+      return _posts
+          .where('communityName',
+              whereIn: community.map((e) => e.name).toList())
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .map(
+            (event) => event.docs
+                .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+                .toList(),
+          );
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      print(e.toString());
+      return const Stream.empty();
+    }
+  }
+
+  FutureVoid deletePost(Post post) async {
+    try {
+      ///
+      return right(_posts.doc(post.id).delete());
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      print(e.toString());
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  void upVote(Post post, String userId) async {
+    try {
+      ///
+      if (post.downvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayRemove([userId]),
+        });
+      }
+      if (post.upvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  ///downvote
+  void downVote(Post post, String userId) async {
+    try {
+      ///
+      if (post.upvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayRemove([userId]),
+        });
+      }
+
+      if (post.downvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

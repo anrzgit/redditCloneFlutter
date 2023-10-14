@@ -21,6 +21,13 @@ final postContollerProvider =
 });
 
 ///
+final userPostsProvider =
+    StreamProvider.family((ref, List<CommunityModel> communities) {
+  final postController = ref.watch(postContollerProvider.notifier);
+  return postController.fetchUserPosts(communities);
+});
+
+///
 class PostController extends StateNotifier<bool> {
   ///
   final PostRepo _postRepo;
@@ -138,7 +145,7 @@ class PostController extends StateNotifier<bool> {
         commentCount: 0,
         username: user.name!,
         uid: user.uid!,
-        type: 'text',
+        type: 'image',
         createdAt: DateTime.now(),
         awards: [],
         link: r,
@@ -152,5 +159,31 @@ class PostController extends StateNotifier<bool> {
         Navigator.pop(context);
       });
     });
+  }
+
+  Stream<List<Post>> fetchUserPosts(List<CommunityModel> community) {
+    if (community.isNotEmpty) {
+      return _postRepo.fetchUserPosts(community);
+    }
+    return Stream.value([]);
+  }
+
+  void deletePost(Post post, BuildContext context) async {
+    final res = await _postRepo.deletePost(post);
+    res.fold(
+      (l) => null,
+      (r) => showSnackBar(context, 'Post deleted Successfully'),
+    );
+  }
+
+  ///
+  void upVote(Post post) async {
+    final uid = _ref.read(userProvider)!.uid!;
+    _postRepo.upVote(post, uid);
+  }
+
+  void downVote(Post post) async {
+    final uid = _ref.read(userProvider)!.uid!;
+    _postRepo.downVote(post, uid);
   }
 }

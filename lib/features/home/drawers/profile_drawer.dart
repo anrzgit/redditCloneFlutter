@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/models/user_model.dart';
 import 'package:reddit_clone/theme/pallette.dart';
@@ -22,6 +25,11 @@ class ProfileDrawer extends ConsumerWidget {
       ref.read(themeNotifierProvider.notifier).toggleTheme();
     }
 
+    void signOut(WidgetRef ref) {
+      print("sign out");
+      ref.read(authContollerProvider.notifier).logout();
+    }
+
     ///
     return Drawer(
       child: SafeArea(
@@ -36,7 +44,7 @@ class ProfileDrawer extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'u/${user.name}'.split('@')[0],
+              'u/${user.email}',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -56,7 +64,7 @@ class ProfileDrawer extends ConsumerWidget {
             ListTile(
               leading: const Icon(Icons.logout_outlined, color: Colors.red),
               title: const Text('Logout'),
-              onTap: () {},
+              onTap: () => signOut(ref),
             ),
             Switch.adaptive(
               value: ref.watch(themeNotifierProvider.notifier).mode ==

@@ -10,6 +10,7 @@ import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/user_profile/controller/user_profile_controller.dart';
+import 'package:reddit_clone/theme/pallette.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
   final String uid;
@@ -91,7 +92,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(userProfileControllerProvider);
-    // final currentTheme = ref.watch(themeNotifierProvider);
+    final currentTheme = ref.watch(themeNotifierProvider);
 
     return ref.watch(getUserDataProvider(widget.uid)).when(
           data: (user) => Scaffold(

@@ -190,19 +190,22 @@ class PostCard extends ConsumerWidget {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          //comment sizedBox
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.comment),
-                              ),
-                              Text(
-                                '${post.commentCount - post.commentCount == 0 ? 'Comment' : post.commentCount - post.commentCount}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ],
+                        GestureDetector(
+                          onTap: () => navigateToComments(context),
+                          child: SizedBox(
+                            //comment sizedBox
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () => navigateToComments(context),
+                                  icon: const Icon(Icons.comment),
+                                ),
+                                Text(
+                                  '${post.commentCount - post.commentCount == 0 ? 'Comment' : post.commentCount - post.commentCount}',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         ref

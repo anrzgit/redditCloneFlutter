@@ -40,25 +40,33 @@ class _MyAppState extends ConsumerState<MyApp> {
         .getUserData(data.uid)
         .first;
     ref.watch(userProvider.notifier).update((state) => userModel);
+    print('userModel: $userModel');
     return userModel;
   }
 
   @override
   Widget build(BuildContext context) {
     return ref.watch(authStateChangesProvider).when(
-          data: (data) => MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ref.watch(themeNotifierProvider),
-            routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
-              if (data != null) {
-                getData(ref, data);
-                if (userModel != null) return loggedInRoutes;
-              }
-              return loggedOutRoutes;
-            }),
-            routeInformationParser: const RoutemasterParser(),
-          ),
+          data: (data) {
+            print("data: $data");
+            return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ref.watch(themeNotifierProvider),
+              routerDelegate: RoutemasterDelegate(
+                routesBuilder: (context) {
+                  if (data != null) {
+                    getData(ref, data);
+                    if (userModel != null) {
+                      return loggedInRoutes;
+                    }
+                  }
+                  return loggedOutRoutes;
+                },
+              ),
+              routeInformationParser: const RoutemasterParser(),
+            );
+          },
           error: (error, stackTrace) => ErrorText(
             error: error.toString(),
           ),

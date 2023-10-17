@@ -94,7 +94,6 @@ class PostController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) {
         showSnackBar(context, 'Post added');
-        print('post added');
         Navigator.pop(context);
       },
     );

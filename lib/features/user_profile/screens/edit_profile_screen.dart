@@ -92,7 +92,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(userProfileControllerProvider);
-    final currentTheme = ref.watch(themeNotifierProvider);
 
     return ref.watch(getUserDataProvider(widget.uid)).when(
           data: (user) => Scaffold(

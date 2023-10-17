@@ -17,7 +17,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   ///
   int _pageIndex = 0;
-  bool _isLoading = false;
 
   ///
   void displayDrawer(BuildContext context) {

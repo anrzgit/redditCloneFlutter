@@ -5,7 +5,6 @@ import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/common/post_card.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
 import 'package:reddit_clone/features/post/controller/post_controller.dart';
-import 'package:routemaster/routemaster.dart';
 
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({super.key});

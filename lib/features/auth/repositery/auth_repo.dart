@@ -21,8 +21,8 @@ final authRepoProvider = Provider(
 );
 
 class AuthRepo {
-  FirebaseFirestore _firestore;
-  FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
   AuthRepo(

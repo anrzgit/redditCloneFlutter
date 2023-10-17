@@ -32,7 +32,6 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
   }
 
   void saveMods() {
-    print(11111);
     ref
         .watch(communityContollerProvider.notifier)
         .addMods(widget.communityName, uids.toList(), context);

@@ -35,8 +35,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    // print('user in home screen: $user');
+    final user = ref.watch(userProvider)!;
+    final bool isGuest = !user.isAuthenticated;
+
+    if (isGuest) {
+      print('User is a guest');
+    } else {
+      print('User is not a guest');
+    }
+
     return Scaffold(
       appBar: AppBar(
           leading: Builder(
@@ -60,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 onPressed: () => displayEndDrawer(context),
                 icon: CircleAvatar(
                   backgroundImage:
-                      NetworkImage(user!.profilePic ?? Constants.avatarDefault),
+                      NetworkImage(user.profilePic ?? Constants.avatarDefault),
                 ),
               ),
             )
@@ -68,21 +75,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: Constants.tabWidgets[_pageIndex],
       drawer: const CommunityListDrawer(),
       endDrawer: const ProfileDrawer(),
-      bottomNavigationBar: CupertinoTabBar(
-        currentIndex: _pageIndex,
-        onTap: onPageChanged,
-        activeColor: Theme.of(context).colorScheme.primary,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_outlined),
-            label: 'Add Post',
-          ),
-        ],
-      ),
+      bottomNavigationBar: isGuest
+          ? null
+          : CupertinoTabBar(
+              currentIndex: _pageIndex,
+              onTap: onPageChanged,
+              activeColor: Theme.of(context).colorScheme.primary,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add_box_outlined),
+                  label: 'Add Post',
+                ),
+              ],
+            ),
     );
   }
 }

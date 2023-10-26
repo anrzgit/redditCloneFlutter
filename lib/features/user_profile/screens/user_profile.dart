@@ -33,7 +33,7 @@ class UserProfile extends ConsumerWidget {
                       children: [
                         Positioned.fill(
                           child: Image.network(
-                            user!.bannerImage!,
+                            user!.banner,
                             fit: BoxFit.cover,
                           ),
                         ),

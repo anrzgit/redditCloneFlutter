@@ -20,12 +20,19 @@ class CommentsScreen extends ConsumerStatefulWidget {
 }
 
 class _CommentsScreenState extends ConsumerState<CommentsScreen> {
+  ///
+  List<String> items = List<String>.generate(10, (i) => 'Item $i');
+
+  ///
+  //
   final commentController = TextEditingController();
+  final heightNotifier = ValueNotifier<double>(0.0);
 
   @override
   void dispose() {
     super.dispose();
     commentController.dispose();
+    heightNotifier.dispose();
   }
 
   void addComment(Post post) {
@@ -48,23 +55,24 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
                 child: Stack(
                   children: [
                     NestedScrollView(
+                      //for multiple sliver app bar
                       floatHeaderSlivers: true,
                       headerSliverBuilder: (context, innerBoxIsScrolled) {
                         return [
                           SliverAppBar(
+                            pinned: true,
                             title: const Text('Comments'),
                             floating: true,
-                            expandedHeight: 490,
                             forceElevated: innerBoxIsScrolled,
                             flexibleSpace: FlexibleSpaceBar(
-                              background: Padding(
-                                padding: const EdgeInsets.only(top: 50),
-                                child: PostCard(
-                                  post: data,
-                                  key: GlobalKey(),
-                                ),
+                              background: Container(
+                                color: Colors.grey[900],
                               ),
                             ),
+                          ),
+                          SliverToBoxAdapter(
+                            key: Key(data.id),
+                            child: PostCard(post: data),
                           ),
                         ];
                       },
@@ -76,7 +84,6 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: ListView.builder(
-                                  shrinkWrap: true,
                                   itemCount: data.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {

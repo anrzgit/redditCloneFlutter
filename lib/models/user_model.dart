@@ -1,43 +1,37 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:flutter/foundation.dart';
 
 class UserModel {
-  final String? uid;
-  final String? email;
-  final String? name;
-  final String? profilePic;
-  final String? bannerImage;
-  final bool? isAuthenticated;
-  final int? karma;
-  final List<String>? awards;
+  final String name;
+  final String profilePic;
+  final String banner;
+  final String uid;
+  final bool isAuthenticated; // if guest or not
+  final int karma;
+  final List<String> awards;
   UserModel({
-    this.uid,
-    this.email,
-    this.name,
-    this.profilePic,
-    this.bannerImage,
-    this.isAuthenticated,
-    this.karma,
-    this.awards,
+    required this.name,
+    required this.profilePic,
+    required this.banner,
+    required this.uid,
+    required this.isAuthenticated,
+    required this.karma,
+    required this.awards,
   });
 
   UserModel copyWith({
-    String? uid,
-    String? email,
     String? name,
     String? profilePic,
-    String? bannerImage,
+    String? banner,
+    String? uid,
     bool? isAuthenticated,
     int? karma,
     List<String>? awards,
   }) {
     return UserModel(
-      uid: uid ?? this.uid,
-      email: email ?? this.email,
       name: name ?? this.name,
       profilePic: profilePic ?? this.profilePic,
-      bannerImage: bannerImage ?? this.bannerImage,
+      banner: banner ?? this.banner,
+      uid: uid ?? this.uid,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       karma: karma ?? this.karma,
       awards: awards ?? this.awards,
@@ -45,12 +39,11 @@ class UserModel {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'uid': uid,
-      'email': email,
+    return {
       'name': name,
       'profilePic': profilePic,
-      'bannerImage': bannerImage,
+      'banner': banner,
+      'uid': uid,
       'isAuthenticated': isAuthenticated,
       'karma': karma,
       'awards': awards,
@@ -60,11 +53,10 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       name: map['name'] ?? '',
-      email: map['email'] ?? '',
       profilePic: map['profilePic'] ?? '',
-      bannerImage: map['bannerImage'] ?? '',
+      banner: map['banner'] ?? '',
       uid: map['uid'] ?? '',
-      isAuthenticated: map['isAuthenticated'] == 'true',
+      isAuthenticated: map['isAuthenticated'] ?? false,
       karma: map['karma']?.toInt() ?? 0,
       awards: List<String>.from(map['awards']),
     );
@@ -72,18 +64,18 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, name: $name, profilePic: $profilePic, bannerImage: $bannerImage, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
+    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
   }
 
   @override
-  bool operator ==(covariant UserModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.uid == uid &&
-        other.email == email &&
+    return other is UserModel &&
         other.name == name &&
         other.profilePic == profilePic &&
-        other.bannerImage == bannerImage &&
+        other.banner == banner &&
+        other.uid == uid &&
         other.isAuthenticated == isAuthenticated &&
         other.karma == karma &&
         listEquals(other.awards, awards);
@@ -91,11 +83,10 @@ class UserModel {
 
   @override
   int get hashCode {
-    return uid.hashCode ^
-        email.hashCode ^
-        name.hashCode ^
+    return name.hashCode ^
         profilePic.hashCode ^
-        bannerImage.hashCode ^
+        banner.hashCode ^
+        uid.hashCode ^
         isAuthenticated.hashCode ^
         karma.hashCode ^
         awards.hashCode;

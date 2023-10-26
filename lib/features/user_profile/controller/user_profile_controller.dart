@@ -66,12 +66,12 @@ class UserProfileController extends StateNotifier<bool> {
     if (bannerFile != null || bannerWebFile != null) {
       final res = await _storageRepository.storeFile(
         path: 'users/banner',
-        id: user.uid!,
+        id: user.uid,
         file: bannerFile,
       );
       res.fold(
         (l) => showSnackBar(context, l.message),
-        (r) => user = user.copyWith(bannerImage: r),
+        (r) => user = user.copyWith(banner: r),
       );
     }
 
@@ -95,7 +95,7 @@ class UserProfileController extends StateNotifier<bool> {
 
   void updateUserKarma(UserKarma karma) async {
     UserModel user = _ref.read(userProvider)!;
-    user = user.copyWith(karma: user.karma! + karma.karma);
+    user = user.copyWith(karma: user.karma + karma.karma);
 
     final res = await _userProfileRepository.updateUserKarma(user);
     res.fold((l) => null,

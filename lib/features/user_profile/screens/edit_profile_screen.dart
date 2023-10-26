@@ -136,8 +136,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                                         ? Image.memory(bannerWebFile!)
                                         : bannerFile != null
                                             ? Image.file(bannerFile!)
-                                            : user!.bannerImage!.isEmpty ||
-                                                    user.bannerImage ==
+                                            : user!.banner.isEmpty ||
+                                                    user.banner ==
                                                         Constants.bannerDefault
                                                 ? const Center(
                                                     child: Icon(
@@ -145,8 +145,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                                                       size: 40,
                                                     ),
                                                   )
-                                                : Image.network(
-                                                    user.bannerImage!),
+                                                : Image.network(user.banner!),
                                   ),
                                 ),
                               ),

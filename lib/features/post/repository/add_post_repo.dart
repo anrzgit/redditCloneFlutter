@@ -53,6 +53,26 @@ class PostRepo {
     }
   }
 
+  //for Guest user
+  Stream<List<Post>> fetchGuestPosts() {
+    try {
+      return _posts
+          .orderBy('createdAt', descending: true)
+          .limit(10)
+          .snapshots()
+          .map(
+            (event) => event.docs
+                .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+                .toList(),
+          );
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      print(e.toString());
+      return const Stream.empty();
+    }
+  }
+
   FutureVoid deletePost(Post post) async {
     try {
       ///

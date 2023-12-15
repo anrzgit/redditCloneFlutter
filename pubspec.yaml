@@ -39,8 +39,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.4.0
+  flutter_stripe: ^9.5.0+1
   fpdart: ^1.1.0
   google_sign_in: ^6.1.5
+  http: ^1.0.1
+  js: ^0.6.7
   routemaster: ^1.0.1
   shared_preferences: ^2.2.1
   uuid: ^4.1.0

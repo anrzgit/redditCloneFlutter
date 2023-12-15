@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/models/user_model.dart';
+import 'package:reddit_clone/test/pay.dart';
 import 'package:reddit_clone/theme/pallette.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -70,6 +71,17 @@ class ProfileDrawer extends ConsumerWidget {
               value: ref.watch(themeNotifierProvider.notifier).mode ==
                   ThemeMode.dark,
               onChanged: (value) => toggleTheme(ref),
+            ),
+            ListTile(
+              leading: const Icon(Icons.payments_outlined),
+              title: const Text('Navigate To Pay'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const PayScreeen(),
+                  ),
+                );
+              },
             ),
             const Spacer(),
           ],

@@ -53,11 +53,9 @@ class _MyAppState extends ConsumerState<MyApp> {
               routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
                 if (data != null) {
                   getData(ref, data);
-                  if (userModel != null) {
-                    return loggedInRoutes;
-                  }
+                  return loggedInRoutes;
                 }
-                return loggedInRoutes;
+                return loggedOutRoutes;
               }),
               routeInformationParser: const RoutemasterParser(),
             );
